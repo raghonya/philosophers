@@ -26,9 +26,8 @@ int	main(int argc, char **argv)
 {
 	t_deadly	philo;
 
-	if (argc != 5 && argc != 6)
-		return (1);
-	if (parsing_args(argv) || initialization(&philo, argc, argv))
+	if ((argc != 5 && argc != 6) || parsing_args(argv) || \
+		initialization(&philo, argc, argv))
 		return (1);
 	gluttonous_philos(&philo);
 	return (0);
