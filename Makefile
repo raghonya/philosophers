@@ -1,6 +1,6 @@
 NAME	=	philo
 
-CFLAGS	=	-Wall -Wextra -Werror -pthread
+CFLAGS	=	-pthread #-Wall -Wextra -Werror 
 
 fa		=	-fsanitize=address -g
 ft		=	#-fsanitize=thread  -g
@@ -12,12 +12,18 @@ OBJDIR	=	obj
 SRCSDIR	=	srcs
 
 SRCS	=	srcs/philo.c \
+			srcs/ft_strlen.c \
+			srcs/ft_isdigit.c \
 			srcs/ft_atoi.c \
-			srcs/endless_eat.c 
+			srcs/endless_eat.c \
+			srcs/parsing_args.c 
 
 OBJS	=	obj/philo.o \
+			obj/ft_strlen.o \
+			obj/ft_isdigit.o \
 			obj/ft_atoi.o \
-			obj/endless_eat.o
+			obj/endless_eat.o \
+			obj/parsing_args.o
 
 IFLAGS	=	-Iincludes
 

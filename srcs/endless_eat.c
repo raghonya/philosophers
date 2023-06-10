@@ -1,10 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   endless_eat.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: raghonya <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/10 18:28:50 by raghonya          #+#    #+#             */
+/*   Updated: 2023/06/10 18:28:53 by raghonya         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <philo.h>
+
+void	*thread_handler(void *param)
+{
+	t_deadly	*philo;
+
+	philo = (t_deadly *)param;
+	
+
+	return (philo);
+}
 
 int	gluttonous_philos(t_deadly *philo)
 {
-	philo->forks = malloc(sizeof(pthread_mutex_t) * philo->forks_count);
-	if (!philo->forks)
+	int	i;
+
+	i = -1;
+	philo->philos = malloc(sizeof(pthread_t) * philo->philo_count);
+	if (err_msg(!philo->philos, "Malloc error\n"))
 		return (1);
-	
+	while (++i < philo->philo_count)
+	{
+		pthread_create(&philo->philos[i], NULL, \
+		&thread_handler, philo);
+	}
 	return (0);
 }
