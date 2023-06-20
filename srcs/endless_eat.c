@@ -14,34 +14,41 @@
 
 void	*thread_handler(void *param)
 {
-	t_deadly	*philo;
+	// t_deadly	*philo;
 	int			i;
 
 	i = -1;
-	philo = (t_deadly *)param;
-	
+	// philo = (t_deadly *)param;
+	// pthread_mutex_lock(&philo->philo_num);
+	// printf ("%d\n", philo->philo_num);
+	// pthread_mutex_unlock(&philo->philo_num);
 	// printf ("aaaa\n");
 
-	return (philo);
+	return (NULL);
 }
 
-int	gluttonous_philos(t_deadly *philo)
+int	gluttonous_philos(t_deadly *table)
 {
 	int	i;
 
 	i = -1;
-	philo->philos = malloc(sizeof(pthread_t) * philo->philo_count);
-	if (err_msg(!philo->philos, "Malloc error\n"))
-		return (1);
-	while (++i < philo->philo_count)
+	while (++i < table->philo_count)
 	{
+		table->philos[i].id = i + 1;
 		if (i % 2)
-			usleep(10);
-		pthread_create(&philo->philos[i], NULL, \
-		&thread_handler, philo);
+		{
+			usleep(1000);
+			if (pthread_create(&table->philos[i].philo, NULL, \
+			&thread_handler, &table->philos[i]))
+				return (1);
+		}
+		else
+			if (pthread_create(&table->philos[i].philo, NULL, \
+			&thread_handler, &table->philos[i]))
+				return (1);
 	}
 	i = -1;
-	while (++i < philo->philo_count)
-		pthread_join(philo->philos[i], NULL);
+	while (++i < table->philo_count)
+		pthread_join(table->philos[i].philo, NULL);
 	return (0);
 }

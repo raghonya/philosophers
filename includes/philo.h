@@ -18,18 +18,28 @@
 # include <stdlib.h>
 # include <pthread.h>
 
-typedef struct s_deadly
+typedef struct s_human
 {
-	int					forks_count;
-	int					philo_count;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
-	int					eat_limit;
-	pthread_t			*philos;
-	pthread_mutex_t		*forks;
+	pthread_mutex_t	*right;
+	pthread_mutex_t	*left;
+	pthread_t		philo;
+	int				id;
+}	t_philo;
+
+typedef struct s_philo
+{
+	pthread_mutex_t	*forks;
+	t_philo			*philos;
+	int				die_state;
+	int				eat_limit;
+	int				forks_count;
+	int				philo_count;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
 
 }	t_deadly;
+
 
 size_t	ft_strlen(char *s);
 int		ft_isdigit(char c);

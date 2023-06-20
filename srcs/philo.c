@@ -17,6 +17,7 @@ int	err_msg(int condition, char *msg)
 	if (condition)
 	{
 		write (1, msg, ft_strlen(msg));
+		write (1, "\n", 1);
 		return (1);
 	}
 	return (0);
@@ -24,11 +25,11 @@ int	err_msg(int condition, char *msg)
 
 int	main(int argc, char **argv)
 {
-	t_deadly	philo;
+	t_deadly	table;
 
 	if ((argc != 5 && argc != 6) || parsing_args(argv) || \
-		initialization(&philo, argc, argv))
+		initialization(&table, argc, argv))
 		return (1);
-	gluttonous_philos(&philo);
+	gluttonous_philos(&table);
 	return (0);
 }
