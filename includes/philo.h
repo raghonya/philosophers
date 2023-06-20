@@ -17,16 +17,18 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <pthread.h>
+# include <sys/time.h>
 
-typedef struct s_human
+typedef struct s_philo
 {
+	struct timeval	time;
 	pthread_mutex_t	*right;
 	pthread_mutex_t	*left;
 	pthread_t		philo;
 	int				id;
 }	t_philo;
 
-typedef struct s_philo
+typedef struct s_deadly
 {
 	pthread_mutex_t	*forks;
 	t_philo			*philos;

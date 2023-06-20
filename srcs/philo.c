@@ -28,8 +28,10 @@ int	main(int argc, char **argv)
 	t_deadly	table;
 
 	if ((argc != 5 && argc != 6) || parsing_args(argv) || \
-		initialization(&table, argc, argv))
+		initialization(&table, argc, argv) || gluttonous_philos(&table))
 		return (1);
-	gluttonous_philos(&table);
+	free(table.forks);
+	free(table.philos);
+
 	return (0);
 }

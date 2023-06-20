@@ -14,15 +14,21 @@
 
 void	*thread_handler(void *param)
 {
-	// t_deadly	*philo;
-	int			i;
+	t_philo	*philo;
+	int		i;
 
 	i = -1;
-	// philo = (t_deadly *)param;
-	// pthread_mutex_lock(&philo->philo_num);
-	// printf ("%d\n", philo->philo_num);
-	// pthread_mutex_unlock(&philo->philo_num);
-	// printf ("aaaa\n");
+	philo = (t_philo *)param;
+	//printf ("%d, %p, %p\n", philo->id, philo->left, philo->right);
+	pthread_mutex_lock(philo->right);
+	gettimeofday(&philo->time, NULL);
+	printf ("%d %d has taken right fork\n", philo->time.tv_usec, philo->id);
+	pthread_mutex_unlock(philo->right);
+	gettimeofday(&philo->time, NULL);
+	pthread_mutex_lock(philo->left);
+	printf ("%d %d has taken left fork\n", philo->time.tv_usec, philo->id);
+	pthread_mutex_unlock(philo->left);
+	
 
 	return (NULL);
 }
@@ -34,10 +40,11 @@ int	gluttonous_philos(t_deadly *table)
 	i = -1;
 	while (++i < table->philo_count)
 	{
+		//printf ("bannn\n");
 		table->philos[i].id = i + 1;
 		if (i % 2)
 		{
-			usleep(1000);
+			usleep(10);
 			if (pthread_create(&table->philos[i].philo, NULL, \
 			&thread_handler, &table->philos[i]))
 				return (1);
