@@ -16,8 +16,8 @@ int	err_msg(int condition, char *msg)
 {
 	if (condition)
 	{
-		write (1, msg, ft_strlen(msg));
-		write (1, "\n", 1);
+		write (2, msg, ft_strlen(msg));
+		write (2, "\n", 1);
 		return (1);
 	}
 	return (0);
@@ -30,6 +30,8 @@ int	main(int argc, char **argv)
 	if ((argc != 5 && argc != 6) || parsing_args(argv) || \
 		initialization(&table, argc, argv) || gluttonous_philos(&table))
 		return (1);
+	while (1)
+		check_philos_alive(&table);
 	free(table.forks);
 	free(table.philos);
 

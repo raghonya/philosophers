@@ -30,10 +30,8 @@ int	parsing_args(char **argv)
 	return (0);
 }
 
-int	initialization(t_deadly *table, int argc, char **argv)
+void	init_args(t_deadly *table, int argc, char **argv)
 {
-	int	i;
-
 	table->philo_count = ft_atoi(argv[1]);
 	table->forks_count = table->philo_count;
 	table->time_to_die = ft_atoi(argv[2]);
@@ -42,20 +40,40 @@ int	initialization(t_deadly *table, int argc, char **argv)
 	table->eat_limit = -1;
 	if (argc == 6)
 		table->eat_limit = ft_atoi(argv[5]);
-	table->forks = malloc(sizeof(pthread_mutex_t) * table->forks_count);
-	table->philos = malloc(sizeof(t_philo) * table->philo_count);
-	if (err_msg(!table->forks || !table->philos, "Malloc error!"))
-		return (1);
+}
+
+void	init_forks(t_deadly *table)
+{
+	int	i;
+
 	i = -1;
+	gettimeofday(&table->time, NULL);
+	table->startime = (table->time.tv_sec) * 1000 + (table->time.tv_usec) / 1000;
+	// printf ("%d\n", table->startime);
 	while (++i < table->philo_count)
 	{
+		table->philos[i].eat_count = 0;
+		table->philos[i].time_to_eat = table->time_to_eat;
+		table->philos[i].time_to_die = table->time_to_die;
+		table->philos[i].time_to_sleep = table->time_to_sleep;
+		table->philos[i].startime = table->startime;
+		table->philos[i].is_dead = &table->dead_ptr;
 		table->philos[i].left = &table->forks[i];
-		// if (philo_num == 1)
 		if (i == 0)
 			table->philos[i].right = &table->forks[table->forks_count - 1];
 		else
 			table->philos[i].right = &table->forks[i - 1];
-
 	}
+}
+
+int	initialization(t_deadly *table, int argc, char **argv)
+{
+	init_args(table, argc, argv);
+	table->forks = malloc(sizeof(pthread_mutex_t) * table->forks_count);
+	table->philos = malloc(sizeof(t_philo) * table->philo_count);
+	if (err_msg(!table->forks || !table->philos, "Malloc error!") || \
+		init_mutexes(table))
+		return (1);
+	init_forks(table);
 	return (0);
 }
