@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_alive.c                                      :+:      :+:    :+:   */
+/*   homemade_usleep.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: raghonya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 17:34:23 by raghonya          #+#    #+#             */
-/*   Updated: 2023/06/30 17:34:24 by raghonya         ###   ########.fr       */
+/*   Created: 2023/06/30 17:34:12 by raghonya          #+#    #+#             */
+/*   Updated: 2023/06/30 17:34:32 by raghonya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-int	check_philos_alive(t_deadly *table)
+int	my_usleep(t_philo *philo, int time_to)
 {
-	pthread_mutex_lock(&table->eat_mutex);
-	if (table->philos[0].eat_count)
-		return (0);
-	pthread_mutex_unlock(&table->eat_mutex);
-	return (1);
+	int	i;
+
+	i = 0;
+	while (i < time_to * 1000)
+	{
+		usleep(50);
+		i += 50;
+	}
+	return (0);
 }

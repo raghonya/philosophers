@@ -2,8 +2,8 @@ NAME	=	philo
 
 CFLAGS	=	-pthread #-Wall -Wextra -Werror 
 
-fa		=	#-fsanitize=address -g
-ft		=	#-fsanitize=thread  -g
+fa		=	-fsanitize=address -g
+ft		=	-fsanitize=thread  -g
 
 DEP		=	Makefile includes/philo.h
 
@@ -18,7 +18,8 @@ SRCS	=	srcs/philo.c \
 			srcs/ft_atoi.c \
 			srcs/check_alive.c \
 			srcs/endless_eat.c \
-			srcs/parsing_args.c 
+			srcs/parsing_args.c \
+			srcs/homemade_usleep.c
 
 OBJS	=	obj/philo.o \
 			obj/mutexes.o \
@@ -27,29 +28,30 @@ OBJS	=	obj/philo.o \
 			obj/ft_atoi.o \
 			obj/check_alive.o \
 			obj/endless_eat.o \
-			obj/parsing_args.o
+			obj/parsing_args.o \
+			obj/homemade_usleep.o
 
 IFLAGS	=	-Iincludes
 
 ifeq ($(MAKECMDGOALS), a)
 CFLAGS	=	$(fa) -pthread #-Wall -Wextra -Werror 
-else
+else ifeq ($(MAKECMDGOALS), t)
 CFLAGS	=	$(ft) -pthread #-Wall -Wextra -Werror
 endif
 
 
-a: objdir $(NAME)
+a: fclean objdir $(NAME)
 
-t: objdir $(NAME)
+t: fclean objdir $(NAME)
 
 objdir:
 	@mkdir -p $(OBJDIR)
 
 $(OBJDIR)/%.o: $(SRCSDIR)/%.c $(DEP)
-	$(CC) $(CFLAGS) $(fa) $(ft) $(IFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(fa) $(ft) $(OBJS) $(IFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(IFLAGS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJDIR)

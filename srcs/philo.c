@@ -23,17 +23,51 @@ int	err_msg(int condition, char *msg)
 	return (0);
 }
 
+void	wait_threads(t_deadly table)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table.philo_count)
+		pthread_join(table.philos[i].philo, NULL);
+}
+
+
+
+
+
+
+
+long long	cur_time(long long start)
+{
+	struct timeval	time;
+	long long		time_ms;
+	gettimeofday(&time, NULL);
+	time_ms =  (time.tv_sec) * 1000 \
+		+ (time.tv_usec) / 1000;
+	return (time_ms - start);
+}
+
+
+
+
+
+
+
+
 int	main(int argc, char **argv)
 {
 	t_deadly	table;
 
-	if ((argc != 5 && argc != 6) || parsing_args(argv) || \
-		initialization(&table, argc, argv) || gluttonous_philos(&table))
+	if (err_msg (argc != 5 && argc != 6, "Give at least 5 arguments") \
+		|| parsing_args(argv) || initialization(&table, argc, argv) \
+		|| gluttonous_philos(&table))
 		return (1);
-	while (1)
-		check_philos_alive(&table);
+	while (check_philos_alive(&table))
+		;
+	wait_threads(table);
+	clear_mutexes(&table, table.forks_count);
 	free(table.forks);
 	free(table.philos);
-
 	return (0);
 }

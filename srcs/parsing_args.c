@@ -48,8 +48,8 @@ void	init_forks(t_deadly *table)
 
 	i = -1;
 	gettimeofday(&table->time, NULL);
-	table->startime = (table->time.tv_sec) * 1000 + (table->time.tv_usec) / 1000;
-	// printf ("%d\n", table->startime);
+	table->startime = (table->time.tv_sec) * 1000 \
+		+ (table->time.tv_usec) / 1000;
 	while (++i < table->philo_count)
 	{
 		table->philos[i].eat_count = 0;
@@ -69,10 +69,11 @@ void	init_forks(t_deadly *table)
 int	initialization(t_deadly *table, int argc, char **argv)
 {
 	init_args(table, argc, argv);
+	table->dead_ptr = 0;
 	table->forks = malloc(sizeof(pthread_mutex_t) * table->forks_count);
 	table->philos = malloc(sizeof(t_philo) * table->philo_count);
-	if (err_msg(!table->forks || !table->philos, "Malloc error!") || \
-		init_mutexes(table))
+	if (err_msg(!table->forks || !table->philos, "Malloc error!") \
+		|| init_mutexes(table))
 		return (1);
 	init_forks(table);
 	return (0);
