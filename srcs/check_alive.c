@@ -14,9 +14,28 @@
 
 int	check_philos_alive(t_deadly *table)
 {
-	pthread_mutex_lock(&table->eat_mutex);
-	if (table->philos[0].eat_count)
+	int	count;
+	int	i;
+
+	i = -1;
+	count = 0;
+	if (table->eat_limit != -1)
+	{
+		while (++i < table->philo_count)
+		{
+			pthread_mutex_lock (&table->eat_mutex);
+			// printf ("eatcnt: %d, eatlmt: %d\n", table->philos[i].eat_count, table->eat_limit);
+			if (table->philos[i].eat_count >= table->eat_limit)
+				count++;
+			pthread_mutex_unlock (&table->eat_mutex);
+		}
+	}
+	if (count == table->philo_count)
+	{
+		pthread_mutex_lock (&table->eat_mutex);
+		table->eat_ptr = 1;
+		pthread_mutex_unlock (&table->eat_mutex);
 		return (0);
-	pthread_mutex_unlock(&table->eat_mutex);
+	}
 	return (1);
 }

@@ -45,6 +45,7 @@ long long	cur_time(long long start)
 	gettimeofday(&time, NULL);
 	time_ms =  (time.tv_sec) * 1000 \
 		+ (time.tv_usec) / 1000;
+	// printf ("%lld - %lld = %lld\n", time_ms, start, time_ms - start);
 	return (time_ms - start);
 }
 

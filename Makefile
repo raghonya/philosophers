@@ -37,8 +37,12 @@ ifeq ($(MAKECMDGOALS), a)
 CFLAGS	=	$(fa) -pthread #-Wall -Wextra -Werror 
 else ifeq ($(MAKECMDGOALS), t)
 CFLAGS	=	$(ft) -pthread #-Wall -Wextra -Werror
+else ifeq ($(MAKECMDGOALS), w)
+CFLAGS	=	-pthread #-Wall -Wextra -Werror
 endif
 
+
+w: fclean objdir $(NAME)
 
 a: fclean objdir $(NAME)
 

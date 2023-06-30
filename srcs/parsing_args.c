@@ -53,6 +53,9 @@ void	init_forks(t_deadly *table)
 	while (++i < table->philo_count)
 	{
 		table->philos[i].eat_count = 0;
+		table->philos[i].eat_mutex = &table->eat_mutex;
+		table->philos[i].full_eat = &table->eat_ptr;
+		// table->philos[i].eat_limit = table->eat_limit;
 		table->philos[i].time_to_eat = table->time_to_eat;
 		table->philos[i].time_to_die = table->time_to_die;
 		table->philos[i].time_to_sleep = table->time_to_sleep;
@@ -69,6 +72,7 @@ void	init_forks(t_deadly *table)
 int	initialization(t_deadly *table, int argc, char **argv)
 {
 	init_args(table, argc, argv);
+	table->eat_ptr = 0;
 	table->dead_ptr = 0;
 	table->forks = malloc(sizeof(pthread_mutex_t) * table->forks_count);
 	table->philos = malloc(sizeof(t_philo) * table->philo_count);

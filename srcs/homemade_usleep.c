@@ -14,7 +14,7 @@
 
 int	my_usleep(t_philo *philo, int time_to)
 {
-	int	i;
+	long long	i;
 
 	i = 0;
 	while (i < time_to * 1000)

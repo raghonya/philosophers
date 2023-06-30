@@ -30,6 +30,8 @@ typedef struct s_philo
 	pthread_mutex_t	*right;
 	long long		startime;
 	int				*is_dead;
+	pthread_mutex_t	*eat_mutex;
+	int				*full_eat;
 	int				eat_count;
 	int				time_to_die;
 	int				time_to_eat;
@@ -40,6 +42,7 @@ typedef struct s_deadly
 {
 	struct timeval	time;
 	pthread_mutex_t	*forks;
+	int				eat_ptr;
 	t_philo			*philos;
 	int				dead_ptr;
 	long long		startime;
