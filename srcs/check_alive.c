@@ -14,6 +14,7 @@
 
 int	check_philos_alive(t_deadly *table)
 {
+	int	havayi;
 	int	count;
 	int	i;
 
@@ -23,19 +24,34 @@ int	check_philos_alive(t_deadly *table)
 	{
 		while (++i < table->philo_count)
 		{
-			pthread_mutex_lock (&table->eat_mutex);
-			// printf ("eatcnt: %d, eatlmt: %d\n", table->philos[i].eat_count, table->eat_limit);
-			if (table->philos[i].eat_count >= table->eat_limit)
+			pthread_mutex_lock (table->philos[i].eat_mutex);
+			havayi = table->philos[i].eat_count;
+			pthread_mutex_unlock (table->philos[i].eat_mutex);
+			if (havayi >= table->eat_limit)
 				count++;
-			pthread_mutex_unlock (&table->eat_mutex);
 		}
 	}
 	if (count == table->philo_count)
 	{
-		pthread_mutex_lock (&table->eat_mutex);
-		table->eat_ptr = 1;
-		pthread_mutex_unlock (&table->eat_mutex);
-		return (0);
+		clear_mutexes(table, table->forks_count);
+		free(table->forks);
+		free(table->philos);
+		return (1);
 	}
-	return (1);
+	i = -1;
+	while (++i < table->philo_count)
+	{
+		pthread_mutex_lock(&table->die_mutex);
+		if (cur_time(0) - table->philos[i].last_eat > table->time_to_die)
+		{
+			printf ("[%lld ms] %d died\n", cur_time(table->philos[i].startime), table->philos[i].id);
+			clear_mutexes(table, table->forks_count);
+			free(table->forks);
+			free(table->philos);
+			pthread_mutex_unlock(&table->die_mutex);
+			return (1);
+		}
+		pthread_mutex_unlock(&table->die_mutex);
+	}
+	return (0);
 }

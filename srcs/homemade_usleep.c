@@ -12,15 +12,8 @@
 
 #include <philo.h>
 
-int	my_usleep(t_philo *philo, int time_to)
+void	my_usleep(t_philo *philo, long long startime, long long time_to)
 {
-	long long	i;
-
-	i = 0;
-	while (i < time_to * 1000)
-	{
+	while (cur_time(0) - startime < time_to)
 		usleep(50);
-		i += 50;
-	}
-	return (0);
 }
