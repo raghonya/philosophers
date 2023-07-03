@@ -42,6 +42,6 @@ int	main(int argc, char **argv)
 		|| gluttonous_philos(&table))
 		return (1);
 	while (1)
-		if (full_check(&table) || die_check(&table))
+		if (table.philo_count < 1 || full_check(&table) || die_check(&table))
 			return (0);
 }
