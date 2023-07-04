@@ -7,7 +7,7 @@ int main(){
 	usleep(200 * 1000);
 	// while (i < 200 * 1000)
 	// {
-	// 	usleep(50);j++;
+	// 	usleep(50);
 	// 	i += 50;
 	// }
 	// printf ("\n\nj = %d\n\n", j);

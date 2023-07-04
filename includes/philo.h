@@ -34,7 +34,8 @@ typedef struct s_philo
 	int				*full_eat;
 	int				eat_count;
 	pthread_mutex_t	*die_mutex;
-	pthread_mutex_t	*eat_mutex;
+	pthread_mutex_t	end_mutex;
+	pthread_mutex_t	eat_mutex;
 	long long		time_to_die;
 	long long		time_to_eat;
 	long long		time_to_sleep;
@@ -49,6 +50,7 @@ typedef struct s_deadly
 	int				dead_ptr;
 	long long		startime;
 	long long		showtime;
+	pthread_mutex_t	end_mutex;
 	pthread_mutex_t	die_mutex;
 	pthread_mutex_t	eat_mutex;
 	int				eat_limit;
@@ -70,7 +72,8 @@ int			init_mutexes(t_deadly *table);
 int			err_msg(int condition, char *msg);
 int			gluttonous_philos(t_deadly *table);
 int			check_philos_alive(t_deadly *table);
-void		my_usleep(t_philo *philo, long long start, long long time_to);
+void		print_step(t_philo *philo, char *msg);
+void		my_usleep(long long start, long long time_to);
 int			clear_mutexes(t_deadly *table, int count);
 int			initialization(t_deadly *table, int argc, char **argv);
 

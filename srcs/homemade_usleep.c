@@ -12,7 +12,7 @@
 
 #include <philo.h>
 
-void	my_usleep(t_philo *philo, long long startime, long long time_to)
+void	my_usleep(long long startime, long long time_to)
 {
 	while (cur_time(0) - startime < time_to)
 		usleep(50);

@@ -1,6 +1,6 @@
 NAME	=	philo
 
-CFLAGS	=	-pthread #-Wall -Wextra -Werror 
+CFLAGS	=	-pthread -Wall -Wextra -Werror 
 
 fa		=	-fsanitize=address -g
 ft		=	-fsanitize=thread  -g
@@ -34,11 +34,11 @@ OBJS	=	obj/philo.o \
 IFLAGS	=	-Iincludes
 
 ifeq ($(MAKECMDGOALS), a)
-CFLAGS	=	$(fa) -pthread #-Wall -Wextra -Werror 
+CFLAGS	=	$(fa) -pthread -Wall -Wextra -Werror 
 else ifeq ($(MAKECMDGOALS), t)
-CFLAGS	=	$(ft) -pthread #-Wall -Wextra -Werror
+CFLAGS	=	$(ft) -pthread -Wall -Wextra -Werror
 else ifeq ($(MAKECMDGOALS), w)
-CFLAGS	=	-pthread #-Wall -Wextra -Werror
+CFLAGS	=	-pthread -Wall -Wextra -Werror
 endif
 
 

@@ -12,33 +12,45 @@
 
 #include <philo.h>
 
+void	print_step(t_philo *philo, char *msg)
+{
+	// printf ("in thread: %p\n", philo->die_mutex);
+	pthread_mutex_lock (philo->die_mutex);
+	if (!*philo->is_dead)
+		printf ("[%lld ms] %d %s\n", cur_time(philo->startime), philo->id, msg);
+	pthread_mutex_unlock (philo->die_mutex);
+}
+
 void	take_forks(t_philo *philo, pthread_mutex_t *first, pthread_mutex_t *second)
 {
 	pthread_mutex_lock (first);
-	if (philo->id % 2 == 0)
-		printf ("[%lld ms] %d has taken a right fork\n", cur_time(philo->startime), philo->id);
-	else
-	printf ("[%lld ms] %d has taken a left fork\n", cur_time(philo->startime), philo->id);
-	pthread_mutex_lock (second);
-	if (philo->id % 2 == 0)
-		printf ("[%lld ms] %d has taken a left fork\n", cur_time(philo->startime), philo->id);
-	else
-		printf ("[%lld ms] %d has taken a right fork\n", cur_time(philo->startime), philo->id);
-	printf ("[%lld ms] %d is eating\n", cur_time(philo->startime), philo->id);
-	my_usleep(philo, cur_time(0), philo->time_to_eat);
-		pthread_mutex_lock (philo->die_mutex);
-		philo->last_eat = cur_time(0);
-		pthread_mutex_unlock (philo->die_mutex);
-	pthread_mutex_unlock (second);
+		
+		if (philo->id % 2 == 0)
+			print_step(philo, "has taken a right fork");
+		else
+			print_step(philo, "has taken a left fork");
+		
+		pthread_mutex_lock (second);
+			if (philo->id % 2 == 0)
+				print_step(philo, "has taken a left fork");
+			else
+				print_step(philo, "has taken a right fork");
+			print_step(philo, "is eating");
+
+			my_usleep(cur_time(0), philo->time_to_eat);
+		
+			pthread_mutex_lock (&philo->end_mutex);
+				philo->last_eat = cur_time(0);
+			pthread_mutex_unlock (&philo->end_mutex);
+		
+		pthread_mutex_unlock (second);
 	pthread_mutex_unlock (first);
 }
 
 void	*thread_handler(void *param)
 {
 	t_philo	*philo;
-	int		i;
 
-	i = -1;
 	philo = (t_philo *)param;
 	while (1)
 	{
@@ -46,16 +58,19 @@ void	*thread_handler(void *param)
 			take_forks(philo, philo->right, philo->left);
 		else
 			take_forks(philo, philo->left, philo->right);
-		printf ("[%lld ms] %d is sleeping\n", cur_time(philo->startime), philo->id);
-		my_usleep(philo, cur_time(0), philo->time_to_sleep);
+		print_step (philo, "is sleeping");
+		// printf ("[%lld ms] %d is sleeping\n", cur_time(philo->startime), philo->id);
+		
+		my_usleep(cur_time(0), philo->time_to_sleep);
 		
 		// EAT COUNT LOCK
-		pthread_mutex_lock (philo->eat_mutex);
-		philo->eat_count++;
-		pthread_mutex_unlock (philo->eat_mutex);
+		pthread_mutex_lock (&philo->eat_mutex);
+			philo->eat_count++;
+		pthread_mutex_unlock (&philo->eat_mutex);
 		// EAT COUNT UNLOCK
-		
-		printf ("[%lld ms] %d is thinking\n", cur_time(philo->startime), philo->id);
+
+		print_step (philo, "is thinking");
+		// printf ("[%lld ms] %d is thinking\n", cur_time(philo->startime), philo->id);
 	}
 	return (NULL);
 }
@@ -81,6 +96,7 @@ int	gluttonous_philos(t_deadly *table)
 			&thread_handler, &table->philos[i]))
 				return (1);
 		}
+		pthread_detach(table->philos[i].philo);
 	}
 	return (0);
 }

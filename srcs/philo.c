@@ -23,15 +23,6 @@ int	err_msg(int condition, char *msg)
 	return (0);
 }
 
-void	wait_threads(t_deadly table)
-{
-	int	i;
-
-	i = -1;
-	while (++i < table.philo_count)
-		pthread_join(table.philos[i].philo, NULL);
-}
-
 long long	cur_time(long long start)
 {
 	struct timeval	time;
@@ -53,7 +44,7 @@ int	main(int argc, char **argv)
 	while (1)
 		if (check_philos_alive(&table))
 		{
-			// printf ("asdn\nsfsafasfsa\nsadasfasf\\n\nn\n\n\\n\n\n\n\n\nn\ndbdsbfds\nasdasdasdsada\n");
+			// printf ("as00dn\nsfsafasfsa\nsadasfasf\\n\n\n\n\n\n\n\nn\n\nn\n\n\\n\n\n\n\n\nn\ndbdsbfds\nasdasdasdsadallllllllllllllllllllllllllllllllllll\n");
 			return (0);
 		}
 }
