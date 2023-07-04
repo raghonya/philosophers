@@ -12,30 +12,39 @@
 
 #include <philo.h>
 
-void	print_step(t_philo *philo, char *msg)
+int	print_step(t_philo *philo, char *msg)
 {
 	// printf ("in thread: %p\n", philo->die_mutex);
 	pthread_mutex_lock (philo->die_mutex);
-	if (!*philo->is_dead)
-		printf ("[%lld ms] %d %s\n", cur_time(philo->startime), philo->id, msg);
+	if (*philo->is_dead)
+	{
+		pthread_mutex_unlock (philo->die_mutex);
+		return (1);
+	}
+	printf ("[%lld ms] %d %s\n", cur_time(philo->startime), philo->id, msg);
 	pthread_mutex_unlock (philo->die_mutex);
+	return (0);
 }
 
-void	take_forks(t_philo *philo, pthread_mutex_t *first, pthread_mutex_t *second)
+int	take_forks(t_philo *philo, pthread_mutex_t *first, pthread_mutex_t *second)
 {
 	pthread_mutex_lock (first);
 		
-		if (philo->id % 2 == 0)
-			print_step(philo, "has taken a right fork");
-		else
-			print_step(philo, "has taken a left fork");
+		if ((philo->id % 2 == 0 && print_step(philo, "has taken a right fork")) \
+		|| (philo->id % 2 == 1 && print_step(philo, "has taken a left fork")))
+			return (1);
+		// else if (philo->id % 2 == 1 && print_step(philo, "has taken a right fork"))
+			// print_step(philo, "has taken a left fork");
 		
 		pthread_mutex_lock (second);
-			if (philo->id % 2 == 0)
-				print_step(philo, "has taken a left fork");
-			else
-				print_step(philo, "has taken a right fork");
-			print_step(philo, "is eating");
+		if ((philo->id % 2 == 0 && print_step(philo, "has taken left fork")) \
+		|| (philo->id % 2 == 1 && print_step(philo, "has taken a right fork")))
+			return (1);
+		// else if (philo->id % 2 == 1 && print_step(philo, "has taken a right fork"))
+			// return (1);
+			// print_step(philo, "has taken a left fork");
+			if (print_step(philo, "is eating"))
+				return (1);
 
 			my_usleep(cur_time(0), philo->time_to_eat);
 		
@@ -45,6 +54,7 @@ void	take_forks(t_philo *philo, pthread_mutex_t *first, pthread_mutex_t *second)
 		
 		pthread_mutex_unlock (second);
 	pthread_mutex_unlock (first);
+	return (0);
 }
 
 void	*thread_handler(void *param)
@@ -54,11 +64,14 @@ void	*thread_handler(void *param)
 	philo = (t_philo *)param;
 	while (1)
 	{
-		if (philo->id % 2 == 0)
-			take_forks(philo, philo->right, philo->left);
-		else
-			take_forks(philo, philo->left, philo->right);
-		print_step (philo, "is sleeping");
+		if ((philo->id % 2 == 0 && take_forks(philo, philo->right, philo->left)) \
+		|| (philo->id % 2 == 1 && take_forks(philo, philo->left, philo->right)))
+			return (NULL);
+			// take_forks(philo, philo->right, philo->left);
+		// else
+			// take_forks(philo, philo->left, philo->right);
+		if (print_step (philo, "is sleeping"))
+			return (NULL);
 		// printf ("[%lld ms] %d is sleeping\n", cur_time(philo->startime), philo->id);
 		
 		my_usleep(cur_time(0), philo->time_to_sleep);
@@ -69,7 +82,8 @@ void	*thread_handler(void *param)
 		pthread_mutex_unlock (&philo->eat_mutex);
 		// EAT COUNT UNLOCK
 
-		print_step (philo, "is thinking");
+		if (print_step (philo, "is thinking"))
+			return (NULL);
 		// printf ("[%lld ms] %d is thinking\n", cur_time(philo->startime), philo->id);
 	}
 	return (NULL);
@@ -96,7 +110,7 @@ int	gluttonous_philos(t_deadly *table)
 			&thread_handler, &table->philos[i]))
 				return (1);
 		}
-		pthread_detach(table->philos[i].philo);
+		// pthread_detach(table->philos[i].philo);
 	}
 	return (0);
 }

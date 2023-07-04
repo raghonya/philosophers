@@ -72,7 +72,7 @@ int			init_mutexes(t_deadly *table);
 int			err_msg(int condition, char *msg);
 int			gluttonous_philos(t_deadly *table);
 int			check_philos_alive(t_deadly *table);
-void		print_step(t_philo *philo, char *msg);
+int			print_step(t_philo *philo, char *msg);
 void		my_usleep(long long start, long long time_to);
 int			clear_mutexes(t_deadly *table, int count);
 int			initialization(t_deadly *table, int argc, char **argv);
