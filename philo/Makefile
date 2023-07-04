@@ -2,9 +2,6 @@ NAME	=	philo
 
 CFLAGS	=	-pthread -Wall -Wextra -Werror
 
-#fa		=	-fsanitize=address -g
-#ft		=	-fsanitize=thread  -g
-
 DEP		=	Makefile includes/philo.h
 
 OBJDIR	=	obj
