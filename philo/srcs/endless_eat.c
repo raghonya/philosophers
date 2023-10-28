@@ -32,11 +32,11 @@ void	take_forks(t_philo *philo, pthread_mutex_t *first, \
 		print_step (philo, "has taken a left fork");
 	else
 		print_step(philo, "has taken a right fork");
-	print_step(philo, "is eating");
-	my_usleep(philo, cur_time(0), philo->time_to_eat);
 	pthread_mutex_lock (&philo->end_mutex);
 	philo->last_eat = cur_time(0);
 	pthread_mutex_unlock (&philo->end_mutex);
+	print_step(philo, "is eating");
+	my_usleep(philo, cur_time(0), philo->time_to_eat);
 	pthread_mutex_unlock (second);
 	pthread_mutex_unlock (first);
 }
